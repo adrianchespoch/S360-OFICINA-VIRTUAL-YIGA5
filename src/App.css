@@ -1,0 +1,9 @@
+/* SideNav */
+.sidenav__nav-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.spacer {
+  flex: 1;
+}
