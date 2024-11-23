@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+
 import UploadDocumentation from './UploadDocumentation';
+
 export interface GetPreventa {
   data: {
     contrato_aceptado: boolean;
