@@ -1,1 +1,0 @@
-export * from './trazabilidad.interface';
