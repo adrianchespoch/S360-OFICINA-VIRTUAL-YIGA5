@@ -35,9 +35,9 @@ const defaultPreventa = {
 const TempAuth: React.FC = () => {
   const { uuid } = useParams<Record<string, string | undefined>>();
   const [preventa, setPreventa] = useState<GetPreventa>();
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [contrato, setContrato] = useState(false);
-  const [token, setToken] = useState('');
+  const token = "7136a9878e53ba02dfdcb36d3d9e3948353e50a3";
   const navigate = useNavigate();
   useEffect(() => {
     authLogin();
@@ -45,31 +45,8 @@ const TempAuth: React.FC = () => {
   }, []);
   const authLogin = async (): Promise<void> => {
     setLoading(true);
-    const myHeaders: Headers = new Headers();
-    myHeaders.append('Content-Type', 'application/json');
-    const raw = JSON.stringify({
-      username: 'admin',
-      password: 'Admin123.',
-      force_login: true,
-    });
-    const requestOptions: RequestInit = {
-      method: 'POST',
-      headers: myHeaders,
-      body: raw,
-    };
-    try {
-      const response: Response = await fetch(
-        `${import.meta.env.VITE_API_ERP}/auth/login/`,
-        requestOptions
-      );
-      const result: string = await response.text();
-      const data = JSON.parse(result);
-      console.log('api auth:', data);
-      if (data?.message === 'Inicio de sesión exitoso') {
         const myHeaders2: Headers = new Headers();
-        console.log(`Token ${data.data.token}`);
-        setToken(data.data.token);
-        myHeaders2.append('Authorization', `Token ${data.data.token}`);
+        myHeaders2.append('Authorization', `Token ${token}`);
         const requestOptions2: RequestInit = {
           method: 'GET',
           headers: myHeaders2,
@@ -77,7 +54,7 @@ const TempAuth: React.FC = () => {
         const response2: Response = await fetch(
           `${
             import.meta.env.VITE_API_ERP
-          }/preventa/free-sales-filters/${uuid}/`,
+          }/preventa/free/${uuid}/`,
           requestOptions2
         );
         const result2: string = await response2.text();
@@ -95,10 +72,6 @@ const TempAuth: React.FC = () => {
             setLoading(false);
           }
         }
-      }
-    } catch (error) {
-      console.error('Error en la autenticación o preventa:', error);
-    }
   };
   return loading ? (
     'Cargando'
