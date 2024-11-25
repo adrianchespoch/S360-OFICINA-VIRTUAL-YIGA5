@@ -1,0 +1,1 @@
+{"root":["./src/App.tsx","./src/main.tsx","./src/vite-env.d.ts","./src/app/account/documentacion/SuccessDocumentation.tsx","./src/app/account/documentacion/TempAuth.tsx","./src/app/account/documentacion/UploadDocumentation.tsx","./src/router/AppRouter.tsx","./src/router/constants/index.ts","./src/router/constants/router-paths.constants.ts"],"version":"5.7.2"}
