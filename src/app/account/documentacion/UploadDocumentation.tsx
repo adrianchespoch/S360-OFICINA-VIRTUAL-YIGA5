@@ -41,10 +41,13 @@ export interface GetPreventa {
 interface MyComponentProps {
   dataPreventa: {
     data: {
-      url_foto_cedula_frontal: string;
-      solicitud_servicio_data: {
-        razon_social: string;
-      };
+      data:{
+        url_foto_cedula_frontal: string;
+        solicitud_servicio_data: {
+          razon_social: string;
+        };
+      }
+      
     };
   };
   token: string;
@@ -118,12 +121,11 @@ const UploadDocumentation: React.FC<MyComponentProps> = ({
       myHeaders.append('Authorization', `Token ${token}`);
       const requestOptions2: RequestInit = {
         method: 'GET',
-        headers: myHeaders,
       };
       const response2: Response = await fetch(
         `${
           import.meta.env.VITE_API_ERP
-        }/auth/generate-temporary-upload-link/?file_name=${storageRef}`,
+        }/file/free-generate-temporary-upload-link/?file_name=${storageRef}`,
         requestOptions2
       );
       const result2: string = await response2.text();
@@ -178,7 +180,7 @@ const UploadDocumentation: React.FC<MyComponentProps> = ({
     );
     return capitalizedNames.join(' ');
   };
-  const fullName = dataPreventa?.data?.solicitud_servicio_data?.razon_social;
+  const fullName = dataPreventa?.data?.data?.solicitud_servicio_data?.razon_social;
   const nombreCliente = formatName(fullName ? fullName : '');
   return (
     <>
@@ -188,12 +190,12 @@ const UploadDocumentation: React.FC<MyComponentProps> = ({
         <Card variant="outlined">
           <CardContent>
             <Stack spacing={5}>
-              <Typography variant="h2">
+              <Typography variant="h5" component={"h1"}>
                 Hola, {nombreCliente} validemos tu identidad a través de una
                 foto.
               </Typography>
               <img
-                src={dataPreventa?.data?.url_foto_cedula_frontal || ''}
+                src={dataPreventa?.data?.data?.url_foto_cedula_frontal || ''}
                 width="100%"
                 alt=""
               />

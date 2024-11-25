@@ -45,33 +45,29 @@ const TempAuth: React.FC = () => {
   }, []);
   const authLogin = async (): Promise<void> => {
     setLoading(true);
-        const myHeaders2: Headers = new Headers();
-        myHeaders2.append('Authorization', `Token ${import.meta.env.VITE_TOKEN_ERP}`);
-        const requestOptions2: RequestInit = {
-          method: 'GET',
-          headers: myHeaders2,
-        };
-        const response2: Response = await fetch(
-          `${
-            import.meta.env.VITE_API_ERP
-          }/preventa/free/${uuid}/`,
-          requestOptions2
-        );
-        const result2: string = await response2.text();
-        const data2 = JSON.parse(result2);
-        console.log('preventa:', data2);
-        if (data2?.message === 'Elemento encontrado') {
-          console.log(data2.data.contrato_aceptado);
-          if (data2.data.contrato_aceptado === false) {
-            console.log('preventa', data2);
-            setPreventa(data2);
-            setLoading(false);
-          } else {
-            navigate('/accounts/success');
-            setContrato(true);
-            setLoading(false);
-          }
-        }
+    const requestOptions2: RequestInit = {
+      method: 'GET',
+    };
+    const response2: Response = await fetch(
+      `${import.meta.env.VITE_API_ERP
+      }/preventa/free/${uuid}/`,
+      requestOptions2
+    );
+    const result2: string = await response2.text();
+    const data2 = JSON.parse(result2);
+    console.log('preventa:', data2);
+    if (data2?.data?.message === 'Elemento encontrado') {
+      console.log(data2.data.contrato_aceptado);
+      if (data2.data.data.contrato_aceptado === false) {
+        console.log('preventa', data2);
+        setPreventa(data2);
+        setLoading(false);
+      } else {
+        navigate('/accounts/success');
+        setContrato(true);
+        setLoading(false);
+      }
+    }
   };
   return loading ? (
     'Cargando'
