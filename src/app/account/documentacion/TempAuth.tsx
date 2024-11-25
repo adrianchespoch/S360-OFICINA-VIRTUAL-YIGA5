@@ -37,7 +37,7 @@ const TempAuth: React.FC = () => {
   const [preventa, setPreventa] = useState<GetPreventa>();
   const [loading, setLoading] = useState(true);
   const [contrato, setContrato] = useState(false);
-  const token = "7136a9878e53ba02dfdcb36d3d9e3948353e50a3";
+
   const navigate = useNavigate();
   useEffect(() => {
     authLogin();
@@ -46,7 +46,7 @@ const TempAuth: React.FC = () => {
   const authLogin = async (): Promise<void> => {
     setLoading(true);
         const myHeaders2: Headers = new Headers();
-        myHeaders2.append('Authorization', `Token ${token}`);
+        myHeaders2.append('Authorization', `Token ${import.meta.env.VITE_TOKEN_ERP}`);
         const requestOptions2: RequestInit = {
           method: 'GET',
           headers: myHeaders2,
@@ -80,7 +80,7 @@ const TempAuth: React.FC = () => {
   ) : (
     <UploadDocumentation
       dataPreventa={preventa || defaultPreventa}
-      token={token}
+      token={import.meta.env.VITE_TOKEN_ERP}
     />
   );
 };
