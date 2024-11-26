@@ -104,14 +104,7 @@ const UploadDocumentation: React.FC<MyComponentProps> = ({
         setImageSrc(imageUrl); // Guarda la URL en el estado
       })
       .catch(error => console.error('Error al obtener la imagen:', error));
-
-    // Limpiar el objeto URL al desmontar el componente
-    return () => {
-      if (imageSrc) {
-        URL.revokeObjectURL(imageSrc);
-      }
-    };
-  }, [imageSrc]);
+  }, []);
   const uploadImage = async (): Promise<void> => {
     console.log('UploadImage');
     if (capturedImage) {
