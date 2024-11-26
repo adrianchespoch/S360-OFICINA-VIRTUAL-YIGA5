@@ -73,7 +73,6 @@ function generateUUID() {
 }
 const UploadDocumentation: React.FC<MyComponentProps> = ({
   dataPreventa,
-  token,
 }) => {
   const webcamRef = useRef<WebcamInstance>(null);
   const [openPdf, setOpenpdf] = useState(false);
@@ -88,20 +87,26 @@ const UploadDocumentation: React.FC<MyComponentProps> = ({
       const uuid = generateUUID();
       const storageRef = `yiga5/images/aceptacioncontrato/aceptacioncontrato_${uuid}`;
       const myHeaders: Headers = new Headers();
-      myHeaders.append('Authorization', `Token ${token}`);
+      myHeaders.append("Content-Type", "application/json");
+      const raw = JSON.stringify({
+        "file_name": storageRef,
+        "expiration": 0
+      });
       const requestOptions2: RequestInit = {
-        method: 'GET',
+        method: 'POST',
+        headers: myHeaders,
+        body: raw,
       };
       const response2: Response = await fetch(
         `${
           import.meta.env.VITE_API_ERP
-        }/file/free-generate-temporary-upload-link/?file_name=${storageRef}`,
+        }/estaticos/temporary-upload-link/`,
         requestOptions2
       );
       const result2: string = await response2.text();
       const data2 = JSON.parse(result2);
       console.log('preventa:', data2);
-      if (data2?.message === 'Temporary upload link generated successfully') {
+      if (data2?.message === 'Temporary upload link created') {
         console.log('temporary uploaud', data2.data);
         const myHeaders = new Headers();
         myHeaders.append('Content-Type', 'image/jpeg');
