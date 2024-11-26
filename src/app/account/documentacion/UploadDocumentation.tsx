@@ -20,7 +20,7 @@ import {
   Typography,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import { useEffect, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Webcam from 'react-webcam';
 //export type Home1Props = {};
@@ -79,32 +79,9 @@ const UploadDocumentation: React.FC<MyComponentProps> = ({
   const [openPdf, setOpenpdf] = useState(false);
   const [onCamera, setOncamera] = useState(false);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
-  const [imageSrc, setImageSrc] = useState<string | null>(null);
   const [checked, setChecked] = useState(false);
   const navigate = useNavigate();
-  useEffect(() => {
-    const requestOptions: RequestInit = {
-      method: 'GET',
-      redirect: 'follow',
-    };
-    // Fetch de la imagen en formato binario (blob)
-    fetch(
-      'http://192.168.10.103:5000/yiga5-erp-dev/images/identificacion/cedula_frontal_1949ade4-0fa6-4016-92c2-b31c91d63616',
-      requestOptions
-    )
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Network response was not ok');
-        }
-        return response.blob(); // Convierte la respuesta en un blob
-      })
-      .then(blob => {
-        // Crea un URL para el blob
-        const imageUrl = URL.createObjectURL(blob);
-        setImageSrc(imageUrl); // Guarda la URL en el estado
-      })
-      .catch(error => console.error('Error al obtener la imagen:', error));
-  }, []);
+
   const uploadImage = async (): Promise<void> => {
     console.log('UploadImage');
     if (capturedImage) {
