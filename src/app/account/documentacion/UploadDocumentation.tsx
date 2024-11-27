@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import CameraIcon from '@mui/icons-material/Camera';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
@@ -82,7 +83,6 @@ const UploadDocumentation: React.FC<MyComponentProps> = ({
   const navigate = useNavigate();
 
   const uploadImage = async (): Promise<void> => {
-    console.log('UploadImage');
     if (capturedImage) {
       const uuid = generateUUID();
       const storageRef = `yiga5/images/aceptacioncontrato/aceptacioncontrato_${uuid}`;
@@ -105,9 +105,9 @@ const UploadDocumentation: React.FC<MyComponentProps> = ({
       );
       const result2: string = await response2.text();
       const data2 = JSON.parse(result2);
-      console.log('preventa:', data2);
-      if (data2?.message === 'Temporary upload link created') {
-        console.log('temporary uploaud', data2.data);
+      console.log('temporary uploaud', data2?.data?.link);
+      if (data2?.data?.link.code === 200) {
+        console.log('temporary uploaud', data2?.data?.link);
         const myHeaders = new Headers();
         myHeaders.append('Content-Type', 'image/jpeg');
         const blob = await fetch(capturedImage).then(res => res.blob());
@@ -118,7 +118,7 @@ const UploadDocumentation: React.FC<MyComponentProps> = ({
           body: blob,
           redirect: 'follow',
         };
-        const response3: Response = await fetch(data2.data, requestOptions3);
+        const response3: Response = await fetch(data2?.data?.link?.data, requestOptions3);
         if (!response3.ok) {
           throw new Error(`Error en la subida: ${response3.statusText}`);
         }
