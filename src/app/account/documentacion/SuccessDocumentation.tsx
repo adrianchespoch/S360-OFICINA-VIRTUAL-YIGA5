@@ -7,7 +7,6 @@ import {
   Typography,
 } from '@mui/material';
 import image from './success.png';
-//export type Home1Props = {};
 export interface GetPreventa {
   data: {
     contrato_aceptado: boolean;
@@ -34,11 +33,11 @@ const SuccessDocumentation: React.FC = () => {
             <Stack spacing={5}>
               <img src={image} width="100%" alt="" />
               <div>
-                <Typography align="center" variant="h2">
+                <Typography align="center" variant="h6">
                   Tu documentación para la validación de identidad ha sido
                   subida con éxito.{' '}
                 </Typography>
-                <Typography align="center" variant="h3">
+                <Typography align="center">
                   Te notificaremos una vez que el proceso haya sido completado.{' '}
                 </Typography>
               </div>

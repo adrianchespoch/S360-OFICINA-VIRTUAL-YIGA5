@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import CameraIcon from '@mui/icons-material/Camera';
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
@@ -22,7 +21,7 @@ import {
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Webcam from 'react-webcam';
 //export type Home1Props = {};
 export interface GetPreventa {
@@ -42,13 +41,13 @@ export interface GetPreventa {
 interface MyComponentProps {
   dataPreventa: {
     data: {
-      data:{
+      data: {
         url_foto_cedula_frontal: string;
         solicitud_servicio_data: {
           razon_social: string;
         };
       }
-      
+
     };
   };
   token: string;
@@ -75,6 +74,7 @@ function generateUUID() {
 const UploadDocumentation: React.FC<MyComponentProps> = ({
   dataPreventa,
 }) => {
+  const { uuid } = useParams<Record<string, string | undefined>>();
   const webcamRef = useRef<WebcamInstance>(null);
   const [openPdf, setOpenpdf] = useState(false);
   const [onCamera, setOncamera] = useState(false);
@@ -84,8 +84,8 @@ const UploadDocumentation: React.FC<MyComponentProps> = ({
 
   const uploadImage = async (): Promise<void> => {
     if (capturedImage) {
-      const uuid = generateUUID();
-      const storageRef = `yiga5/images/aceptacioncontrato/aceptacioncontrato_${uuid}`;
+      const generateUuid = generateUUID();
+      const storageRef = `yiga5/images/aceptacioncontrato/aceptacioncontrato_${generateUuid}`;
       const myHeaders: Headers = new Headers();
       myHeaders.append("Content-Type", "application/json");
       const raw = JSON.stringify({
@@ -98,8 +98,7 @@ const UploadDocumentation: React.FC<MyComponentProps> = ({
         body: raw,
       };
       const response2: Response = await fetch(
-        `${
-          import.meta.env.VITE_API_ERP
+        `${import.meta.env.VITE_API_ERP
         }/estaticos/temporary-upload-link/`,
         requestOptions2
       );
@@ -123,16 +122,30 @@ const UploadDocumentation: React.FC<MyComponentProps> = ({
           throw new Error(`Error en la subida: ${response3.statusText}`);
         }
         const result3: string = await response3.text();
+        console.log("result3", result3);
+        //
+        const myHeaders1 = new Headers();
+        myHeaders1.append("Content-Type", "application/json");
+        const raw1 = JSON.stringify({
+          "url_foto_aceptacion": `${import.meta.env.VITE_STORAGEAPI_URL}/${import.meta.env.VITE_MINIO_BUCKET_NAME}/`,
+          "contrato_aceptado": true
+        });
+        const requestOptions4: RequestInit = {
+          method: "PATCH",
+          headers: myHeaders1,
+          body: raw1,
+          redirect: "follow"
+        };
+        const response4: Response = await fetch(
+          `${import.meta.env.VITE_API_ERP}/preventa/free-accept-contract/${uuid}/`,
+          requestOptions4
+        );
+        if (!response4.ok) {
+          throw new Error(`Error en la actualizacion: ${response4.statusText}`);
+        }
+        const result4: string = await response4.text();
+        console.log("result4", result4);
         navigate('/accounts/success');
-
-        //const data3 = JSON.parse(result3);
-        console.log(result3);
-      }
-      try {
-        // Subir la imagen en formato de base64 a Firebase Storage
-        //alert('Imagen subida exitosamente a Firebase Storage');
-      } catch (error) {
-        console.error('Error subiendo la imagen: ', error);
       }
     }
   };
