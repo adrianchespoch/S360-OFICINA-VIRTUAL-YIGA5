@@ -80,6 +80,7 @@ const UploadDocumentation: React.FC<MyComponentProps> = ({
   const [onCamera, setOncamera] = useState(false);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
   const [checked, setChecked] = useState(false);
+  const [contType, setContType] = useState<string | undefined>(undefined);
   const navigate = useNavigate();
 
   const uploadImage = async (): Promise<void> => {
@@ -108,7 +109,7 @@ const UploadDocumentation: React.FC<MyComponentProps> = ({
       if (data2?.data?.link.code === 200) {
         console.log('temporary uploaud', data2?.data?.link);
         const myHeaders = new Headers();
-        myHeaders.append('Content-Type', 'image/jpeg');
+        myHeaders.append('Content-Type', `${contType}`);
         const blob = await fetch(capturedImage).then(res => res.blob());
         //const file = "<file contents here>";
         const requestOptions3: RequestInit = {
@@ -124,10 +125,12 @@ const UploadDocumentation: React.FC<MyComponentProps> = ({
         const result3: string = await response3.text();
         console.log("result3", result3);
         //
+        const urlStorage = `${import.meta.env.VITE_STORAGEAPI_URL}/${import.meta.env.VITE_MINIO_BUCKET_NAME}/${generateUuid}`
+        console.log("urlStorage", urlStorage)
         const myHeaders1 = new Headers();
         myHeaders1.append("Content-Type", "application/json");
         const raw1 = JSON.stringify({
-          "url_foto_aceptacion": `${import.meta.env.VITE_STORAGEAPI_URL}/${import.meta.env.VITE_MINIO_BUCKET_NAME}/`,
+          "url_foto_aceptacion": urlStorage,
           "contrato_aceptado": true
         });
         const requestOptions4: RequestInit = {
@@ -152,7 +155,9 @@ const UploadDocumentation: React.FC<MyComponentProps> = ({
   const capture = (): void => {
     const imageSrc = webcamRef.current?.getScreenshot();
     if (imageSrc) {
-      console.log(imageSrc);
+      const contentType = imageSrc.match(/^data:(image\/[a-zA-Z]+);base64,/)?.[1];
+      console.log("contentType:",contentType)
+      setContType(contentType);
       setCapturedImage(imageSrc);
     }
   };
@@ -308,6 +313,10 @@ const UploadDocumentation: React.FC<MyComponentProps> = ({
                           const filePreview = event.target?.files?.[0]
                             ? URL.createObjectURL(event.target.files[0])
                             : null;
+                          //
+                          const contentType = event.target?.files?.[0]?.type
+                          console.log("contentType", contentType)
+                          setContType(contentType)
                           setCapturedImage(filePreview);
                           setOncamera(true);
                         }}
