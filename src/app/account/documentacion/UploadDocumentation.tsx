@@ -125,7 +125,7 @@ const UploadDocumentation: React.FC<MyComponentProps> = ({
         const result3: string = await response3.text();
         console.log("result3", result3);
         //
-        const urlStorage = `${import.meta.env.VITE_STORAGEAPI_URL}/${import.meta.env.VITE_MINIO_BUCKET_NAME}/${generateUuid}`
+        const urlStorage = `${import.meta.env.VITE_STORAGEAPI_URL}/${import.meta.env.VITE_MINIO_BUCKET_NAME}/${storageRef}`
         console.log("urlStorage", urlStorage)
         const myHeaders1 = new Headers();
         myHeaders1.append("Content-Type", "application/json");
