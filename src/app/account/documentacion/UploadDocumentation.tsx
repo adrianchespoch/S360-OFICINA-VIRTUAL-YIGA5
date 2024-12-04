@@ -8,7 +8,6 @@ import PersonIcon from '@mui/icons-material/Person';
 import WarningIcon from '@mui/icons-material/Warning';
 import {
   Box,
-  Button,
   Card,
   CardContent,
   Checkbox,
@@ -17,8 +16,12 @@ import {
   DialogContent,
   Link,
   Stack,
-  Typography,
 } from '@mui/material';
+import {
+  Button,
+  Typography
+} from '@mui/joy';
+
 import { styled } from '@mui/material/styles';
 import { useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -183,7 +186,7 @@ const UploadDocumentation: React.FC<MyComponentProps> = ({
         <Card variant="outlined">
           <CardContent>
             <Stack spacing={5}>
-              <Typography variant="h5" component={"h1"}>
+              <Typography level="h4">
                 Hola, {nombreCliente} validemos tu identidad a través de una
                 foto.
               </Typography>
@@ -204,10 +207,10 @@ const UploadDocumentation: React.FC<MyComponentProps> = ({
                     {/* <Typography sx={{ fontWeight: "normal" }} variant="h4" >Usaremos esta foto para validar tu identidad</Typography> */}
                     <img src={capturedImage} alt="Captura" width="100%" />
                     <Button
-                      startIcon={<DeleteIcon />}
+                      startDecorator={<DeleteIcon />}
                       style={{ textTransform: 'none' }}
                       variant="outlined"
-                      color="error"
+                      color="danger"
                       onClick={() => setCapturedImage(null)}
                     >
                       Eliminar foto
@@ -224,15 +227,15 @@ const UploadDocumentation: React.FC<MyComponentProps> = ({
                       />
                       <Stack direction="row" spacing={2}>
                         <Button
-                          startIcon={<CameraAltIcon />}
-                          color="error"
+                          startDecorator={<CameraAltIcon />}
+                          color="danger"
                           variant="outlined"
                           onClick={() => setOncamera(false)}
                         >
                           Cancelar
                         </Button>
                         <Button
-                          startIcon={<CameraIcon />}
+                          startDecorator={<CameraIcon />}
                           variant="outlined"
                           onClick={capture}
                         >
@@ -304,7 +307,7 @@ const UploadDocumentation: React.FC<MyComponentProps> = ({
                       role={undefined}
                       variant="outlined"
                       tabIndex={-1}
-                      startIcon={<CloudUploadIcon />}
+                      startDecorator={<CloudUploadIcon />}
                     >
                       Subir archivos
                       <VisuallyHiddenInput
@@ -324,7 +327,7 @@ const UploadDocumentation: React.FC<MyComponentProps> = ({
                       />
                     </Button>
                     <Button
-                      startIcon={<CameraAltIcon />}
+                      startDecorator={<CameraAltIcon />}
                       variant="outlined"
                       onClick={() => setOncamera(true)}
                     >
@@ -366,10 +369,8 @@ const UploadDocumentation: React.FC<MyComponentProps> = ({
                 }}
               >
                 <Button
-                  size="large"
                   onClick={uploadImage}
                   disabled={checked === false || capturedImage == null}
-                  variant="contained"
                 >
                   Enviar confirmación
                 </Button>

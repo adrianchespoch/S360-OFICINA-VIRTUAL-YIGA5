@@ -1,12 +1,11 @@
 import {
   Box,
-  Card,
   CardContent,
   Container,
   Stack,
   Typography,
-} from '@mui/material';
-import image from './success.png';
+} from '@mui/joy';
+import image from '../../../assets/report-analysis-8.svg';
 export interface GetPreventa {
   data: {
     contrato_aceptado: boolean;
@@ -28,29 +27,27 @@ const SuccessDocumentation: React.FC = () => {
       <Container maxWidth="sm">
         {/*      <Typography align="center" variant="h2"> <strong>Aceptación de Contrato</strong> </Typography> */}
         <Box p={2}></Box>
-        <Card variant="outlined">
-          <CardContent>
-            <Stack spacing={5}>
-              <img src={image} width="100%" alt="" />
-              <div>
-                <Typography align="center" variant="h6">
-                  Tu documentación para la validación de identidad ha sido
-                  subida con éxito.{' '}
-                </Typography>
-                <Typography align="center">
-                  Te notificaremos una vez que el proceso haya sido completado.{' '}
-                </Typography>
-              </div>
 
-              {/* <div>
+        <CardContent>
+          <Stack spacing={5}>
+            <img src={image} width="100%" alt="" />
+            <Box sx={{ textAlign: "center"}}>
+              <Typography level="h3" >
+                Se ha enviado tu documentación para la validación de identidad.{' '}
+              </Typography >
+              <Typography >
+                Te notificaremos una vez que el proceso haya sido completado.{' '}
+              </Typography>
+            </Box>
+            {/* <div>
               <Typography variant="h4"><strong>Cédula de Identidad</strong></Typography>
               <img src={preventa?.data?.url_foto_cedula_frontal || ""} width="100%" alt="" />
             </div>
             <Typography variant="h4"><strong>Validacion de identidad</strong></Typography>
             <Typography>Usaremos tu cámara para verificar tu identidad</Typography> */}
-            </Stack>
-          </CardContent>
-        </Card>
+          </Stack>
+        </CardContent>
+
       </Container>
     </>
   );

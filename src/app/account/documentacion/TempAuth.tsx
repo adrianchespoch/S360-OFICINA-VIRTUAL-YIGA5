@@ -76,7 +76,7 @@ const TempAuth: React.FC = () => {
   ) : (
     <UploadDocumentation
       dataPreventa={preventa || defaultPreventa}
-      token={import.meta.env.VITE_TOKEN_ERP}
+    
     />
   );
 };
