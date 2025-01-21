@@ -76,7 +76,6 @@ const TempAuth: React.FC = () => {
   ) : (
     <UploadDocumentation
       dataPreventa={preventa || defaultPreventa}
-    
     />
   );
 };
