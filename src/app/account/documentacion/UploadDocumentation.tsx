@@ -26,35 +26,12 @@ import { styled } from '@mui/material/styles';
 import { useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Webcam from 'react-webcam';
+import { PreventaData } from './TempAuth';
 //export type Home1Props = {};
-export interface GetPreventa {
-  data: {
-    contrato_aceptado: boolean;
-    url_foto_cedula_frontal: string;
-    linea_servicio_data: {
-      contrato_data: {
-        url_contrato: string;
-      };
-    };
-    solicitud_servicio_data: {
-      razon_social: string;
-    };
-  };
+interface DetallePreventaProps {
+  data: PreventaData;
 }
-interface MyComponentProps {
-  dataPreventa: {
-    data: {
-      data: {
-        url_foto_cedula_frontal: string;
-        solicitud_servicio_data: {
-          razon_social: string;
-        };
-      }
 
-    };
-  };
-  token: string;
-}
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
   clipPath: 'inset(50%)',
@@ -74,8 +51,8 @@ function generateUUID() {
     return v.toString(16); // Convertir a hexadecimal
   });
 }
-const UploadDocumentation: React.FC<MyComponentProps> = ({
-  dataPreventa,
+const UploadDocumentation: React.FC<DetallePreventaProps> = ({
+  data,
 }) => {
   const { uuid } = useParams<Record<string, string | undefined>>();
   const webcamRef = useRef<WebcamInstance>(null);
@@ -176,7 +153,7 @@ const UploadDocumentation: React.FC<MyComponentProps> = ({
     );
     return capitalizedNames.join(' ');
   };
-  const fullName = dataPreventa?.data?.data?.solicitud_servicio_data?.razon_social;
+  const fullName = data?.solicitud_servicio_data?.razon_social;
   const nombreCliente = formatName(fullName ? fullName : '');
   return (
     <>
@@ -191,7 +168,7 @@ const UploadDocumentation: React.FC<MyComponentProps> = ({
                 foto.
               </Typography>
               <img
-                src={dataPreventa?.data?.data?.url_foto_cedula_frontal || ''}
+                src={data?.url_foto_cedula_frontal || ''}
                 width="100%"
                 alt=""
               />
