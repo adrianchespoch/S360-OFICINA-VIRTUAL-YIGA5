@@ -364,7 +364,7 @@ const UploadDocumentation: React.FC<DetallePreventaProps> = ({
           <DialogContent>
             <embed
               type="application/pdf"
-              src="http://192.168.10.103:5000/yiga5-erp-dev/yiga5/pdfs/contratos/contrato-fe821d95-e5d2-4f98-903e-2817c73253b3.pdf"
+              src={data?.linea_servicio_data?.contrato_data?.url_contrato}
               width="100%"
               height="800"
             />
