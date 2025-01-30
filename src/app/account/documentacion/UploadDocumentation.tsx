@@ -56,6 +56,7 @@ const UploadDocumentation: React.FC<DetallePreventaProps> = ({
 }) => {
   const { uuid } = useParams<Record<string, string | undefined>>();
   const webcamRef = useRef<WebcamInstance>(null);
+  const [loading, setLoading] = useState(false);
   const [openPdf, setOpenpdf] = useState(false);
   const [onCamera, setOncamera] = useState(false);
   const [capturedImage, setCapturedImage] = useState<string | null>(null);
@@ -64,79 +65,86 @@ const UploadDocumentation: React.FC<DetallePreventaProps> = ({
   const navigate = useNavigate();
 
   const uploadImage = async (): Promise<void> => {
-    if (capturedImage) {
-      const generateUuid = generateUUID();
-      const storageRef = `yiga5/images/aceptacioncontrato/aceptacioncontrato_${generateUuid}`;
-      const myHeaders: Headers = new Headers();
-      myHeaders.append("Content-Type", "application/json");
-      const raw = JSON.stringify({
-        "file_name": storageRef,
-        "expiration": 0
-      });
-      const requestOptions2: RequestInit = {
-        method: 'POST',
-        headers: myHeaders,
-        body: raw,
-      };
-      const response2: Response = await fetch(
-        `${import.meta.env.VITE_API_ERP
-        }/estaticos/temporary-upload-link/`,
-        requestOptions2
-      );
-      const result2: string = await response2.text();
-      const data2 = JSON.parse(result2);
-      console.log('temporary uploaud', data2?.data?.link);
-      if (data2?.data?.link.code === 200) {
-        console.log('temporary uploaud', data2?.data?.link);
-        const myHeaders = new Headers();
-        myHeaders.append('Content-Type', `${contType}`);
-        const blob = await fetch(capturedImage).then(res => res.blob());
-        //const file = "<file contents here>";
-        const requestOptions3: RequestInit = {
-          method: 'PUT',
-          headers: myHeaders,
-          body: blob,
-          redirect: 'follow',
-        };
-        const response3: Response = await fetch(data2?.data?.link?.data, requestOptions3);
-        if (!response3.ok) {
-          throw new Error(`Error en la subida: ${response3.statusText}`);
-        }
-        const result3: string = await response3.text();
-        console.log("result3", result3);
-        //
-        const urlStorage = `${import.meta.env.VITE_STORAGEAPI_URL}/${import.meta.env.VITE_MINIO_BUCKET_NAME}/${storageRef}`
-        console.log("urlStorage", urlStorage)
-        const myHeaders1 = new Headers();
-        myHeaders1.append("Content-Type", "application/json");
-        const raw1 = JSON.stringify({
-          "url_foto_aceptacion": urlStorage,
-          "contrato_aceptado": true
+    try {
+      setLoading(true);
+      if (capturedImage) {
+        const generateUuid = generateUUID();
+        const storageRef = `yiga5/images/aceptacioncontrato/aceptacioncontrato_${generateUuid}`;
+        const myHeaders: Headers = new Headers();
+        myHeaders.append("Content-Type", "application/json");
+        const raw = JSON.stringify({
+          "file_name": storageRef,
+          "expiration": 0
         });
-        const requestOptions4: RequestInit = {
-          method: "PATCH",
-          headers: myHeaders1,
-          body: raw1,
-          redirect: "follow"
+        const requestOptions2: RequestInit = {
+          method: 'POST',
+          headers: myHeaders,
+          body: raw,
         };
-        const response4: Response = await fetch(
-          `${import.meta.env.VITE_API_ERP}/preventa/free-accept-contract/${uuid}/`,
-          requestOptions4
+        const response2: Response = await fetch(
+          `${import.meta.env.VITE_API_ERP
+          }/estaticos/temporary-upload-link/`,
+          requestOptions2
         );
-        if (!response4.ok) {
-          throw new Error(`Error en la actualizacion: ${response4.statusText}`);
+        const result2: string = await response2.text();
+        const data2 = JSON.parse(result2);
+        console.log('temporary uploaud', data2?.data?.link);
+        if (data2?.data?.link.code === 200) {
+          console.log('temporary uploaud', data2?.data?.link);
+          const myHeaders = new Headers();
+          myHeaders.append('Content-Type', `${contType}`);
+          const blob = await fetch(capturedImage).then(res => res.blob());
+          //const file = "<file contents here>";
+          const requestOptions3: RequestInit = {
+            method: 'PUT',
+            headers: myHeaders,
+            body: blob,
+            redirect: 'follow',
+          };
+          const response3: Response = await fetch(data2?.data?.link?.data, requestOptions3);
+          if (!response3.ok) {
+            throw new Error(`Error en la subida: ${response3.statusText}`);
+          }
+          const result3: string = await response3.text();
+          console.log("Estado:", result3);
+          //
+          const urlStorage = `${import.meta.env.VITE_STORAGEAPI_URL}/${import.meta.env.VITE_MINIO_BUCKET_NAME}/${storageRef}`
+          //console.log("urlStorage", urlStorage)
+          const myHeaders1 = new Headers();
+          myHeaders1.append("Content-Type", "application/json");
+          const raw1 = JSON.stringify({
+            "url_foto_aceptacion": urlStorage,
+            "contrato_aceptado": true
+          });
+          const requestOptions4: RequestInit = {
+            method: "PATCH",
+            headers: myHeaders1,
+            body: raw1,
+            redirect: "follow"
+          };
+          const response4: Response = await fetch(
+            `${import.meta.env.VITE_API_ERP}/preventa/free-accept-contract/${uuid}/`,
+            requestOptions4
+          );
+          if (!response4.ok) {
+            throw new Error(`Error en la actualizacion: ${response4.statusText}`);
+          }
+          const result4: string = await response4.text();
+          console.log("result4", result4);
+          setLoading(false);
+          navigate('/accounts/success');
         }
-        const result4: string = await response4.text();
-        console.log("result4", result4);
-        navigate('/accounts/success');
       }
+    } catch (error) {
+      setLoading(false);
+      alert(error);
     }
   };
   const capture = (): void => {
     const imageSrc = webcamRef.current?.getScreenshot();
     if (imageSrc) {
       const contentType = imageSrc.match(/^data:(image\/[a-zA-Z]+);base64,/)?.[1];
-      console.log("contentType:",contentType)
+      console.log("contentType:", contentType)
       setContType(contentType);
       setCapturedImage(imageSrc);
     }
@@ -347,7 +355,8 @@ const UploadDocumentation: React.FC<DetallePreventaProps> = ({
               >
                 <Button
                   onClick={uploadImage}
-                  disabled={checked === false || capturedImage == null}
+                  loading={loading}
+                  disabled={checked === false || capturedImage == null || loading}
                 >
                   Enviar confirmación
                 </Button>
