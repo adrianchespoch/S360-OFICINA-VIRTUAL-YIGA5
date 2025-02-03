@@ -297,6 +297,7 @@ const UploadDocumentation: React.FC<DetallePreventaProps> = ({
                       Subir archivos
                       <VisuallyHiddenInput
                         type="file"
+                        accept="image/jpg, image/jpeg, image/png"
                         onChange={(event: any) => {
                           const filePreview = event.target?.files?.[0]
                             ? URL.createObjectURL(event.target.files[0])
